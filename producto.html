@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Producto · Apolaris</title>
+  <meta name="theme-color" content="#0f1630">
+  <link rel="icon" href="assets/icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Michroma&family=Cinzel:wght@400;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="producto">
+
+  <div class="container">
+    <nav class="crumbs"><a href="index.html">Inicio</a> / <a href="coleccion.html">Colecciones</a> / <span id="crumb"></span></nav>
+
+    <div class="pdp">
+      <div class="gallery">
+        <div class="thumbs" id="thumbs"></div>
+        <div class="main-img" id="main-img"></div>
+      </div>
+
+      <div class="pdp-info">
+        <span class="eyebrow" id="tag">Estrella del Norte</span>
+        <h1 id="name"></h1>
+        <p class="serif" style="font-size:1.25rem;color:var(--muted-foreground);margin:0" id="desc"></p>
+        <div class="price" id="price"></div>
+
+        <div class="opt">
+          <div class="opt-head"><span>Color</span><span id="color-name"></span></div>
+          <div class="chips" id="colors"></div>
+        </div>
+        <div class="opt">
+          <div class="opt-head"><span>Cuello</span><span id="neck-name"></span></div>
+          <div class="chips" id="necks"></div>
+        </div>
+        <div class="opt">
+          <div class="opt-head"><span>Manga</span><span id="sleeve-name"></span></div>
+          <div class="chips" id="sleeves"></div>
+        </div>
+        <div class="opt">
+          <div class="opt-head"><span>Talla</span><a href="#" style="text-decoration:underline;font-size:.8rem;letter-spacing:0;text-transform:none">Guía de tallas</a></div>
+          <div class="chips" id="sizes"></div>
+        </div>
+
+        <div class="pdp-actions">
+          <button class="btn btn-primary btn-block" onclick="addToCart()"><i class="fa-solid fa-bag-shopping"></i> Agregar a la bolsa</button>
+          <a class="btn btn-secondary btn-block" id="customize" href="personaliza.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Personalizar este modelo</a>
+          <a class="btn btn-wa btn-block" id="ask"><i class="fa-brands fa-whatsapp"></i> Hablar con un asesor</a>
+        </div>
+
+        <div class="perks">
+          <div><i class="fa-solid fa-truck-fast"></i> Envío a toda Colombia · gratis desde $200.000</div>
+          <div><i class="fa-solid fa-rotate-left"></i> Cambios de talla dentro de los 15 días</div>
+          <div><i class="fa-solid fa-lock"></i> Pago seguro con PSE, Nequi o tarjeta</div>
+        </div>
+
+        <details class="acc" open><summary>Detalles</summary><p>Algodón peinado 180 g/m², costuras reforzadas en hombros y estampado de alta durabilidad. Hecha en Colombia.</p></details>
+        <details class="acc"><summary>Cuidados</summary><p>Lavar al revés en agua fría, no usar blanqueador, secar a la sombra y planchar por el revés.</p></details>
+        <details class="acc"><summary>Envíos y cambios</summary><p>Despachamos en 1–3 días hábiles. Recibes el número de guía por correo y WhatsApp, y puedes seguir tu pedido en línea.</p></details>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" style="background:var(--ivory)">
+    <div class="container">
+      <div class="section-title"><span class="eyebrow">También te puede gustar</span><h2>Completa tu órbita</h2></div>
+      <div class="products" id="related"></div>
+    </div>
+  </section>
+
+  <script src="assets/app.js"></script>
+  <script>
+    window.pageInit = () => {
+      const id = new URLSearchParams(location.search).get('p') ?? 'polaris';
+      const p = PRODUCTS.find((x) => x.id === id) ?? PRODUCTS[0];
+      const state = { color: p.colors[0], neck: p.neck, sleeve: p.sleeve, view: 'front', size: 'M' };
+      const NECKS = { redondo: 'Redondo', v: 'Cuello V', polo: 'Polo' };
+      const SLEEVES = { corta: 'Corta', larga: 'Larga' };
+      document.title = `${p.name} · Apolaris`;
+      crumb.textContent = p.name;
+      document.getElementById('name').textContent = p.name;
+      desc.textContent = p.desc;
+      price.textContent = cop.format(p.price);
+      if (p.tag) tag.textContent = p.tag;
+
+      const views = ['front', 'back', 'detail', 'model'];
+      const draw = () => {
+        const v = state.view === 'detail' || state.view === 'model' ? 'front' : state.view;
+        document.getElementById('main-img').innerHTML =
+          shirtSVG({ ...state, print: p.print, view: v }) +
+          (state.view === 'model' ? '<span class="mock-note" style="position:absolute;bottom:1rem;left:1rem;color:var(--muted-foreground)">Foto con modelo pendiente</span>' : '');
+        if (state.view === 'detail') document.querySelector('#main-img svg').style.transform = 'scale(1.9) translateY(12%)';
+        thumbs.innerHTML = views.map((vw) =>
+          `<button class="${vw === state.view ? 'on' : ''}" data-v="${vw}" aria-label="Vista ${vw}">${shirtSVG({ ...state, print: p.print, view: vw === 'back' ? 'back' : 'front' })}</button>`).join('');
+        thumbs.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { state.view = b.dataset.v; draw(); }));
+        document.getElementById('color-name').textContent = COLORS[state.color].name;
+        document.getElementById('neck-name').textContent = NECKS[state.neck];
+        document.getElementById('sleeve-name').textContent = SLEEVES[state.sleeve];
+        customize.href = `personaliza.html?color=${state.color}&neck=${state.neck}&sleeve=${state.sleeve}`;
+        ask.href = wa(`Hola, me interesa la camiseta ${p.name} (${COLORS[state.color].name}, ${NECKS[state.neck]}, manga ${SLEEVES[state.sleeve].toLowerCase()}, talla ${state.size}).`);
+        ask.target = '_blank';
+      };
+
+      colors.innerHTML = p.colors.map((c) => `<button class="color-dot" data-c="${c}" title="${COLORS[c].name}" aria-label="${COLORS[c].name}" style="background:${COLORS[c].hex}"></button>`).join('');
+      necks.innerHTML = Object.entries(NECKS).map(([k, l]) => `<button class="chip" data-n="${k}">${l}</button>`).join('');
+      sleeves.innerHTML = Object.entries(SLEEVES).map(([k, l]) => `<button class="chip" data-s="${k}">${l}</button>`).join('');
+      sizes.innerHTML = ['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((s) => `<button class="chip" data-z="${s}" ${s === 'XXL' ? 'disabled style="opacity:.35;text-decoration:line-through"' : ''}>${s}</button>`).join('');
+      const sync = () => {
+        colors.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.c === state.color));
+        necks.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.n === state.neck));
+        sleeves.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === state.sleeve));
+        sizes.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.z === state.size));
+        draw();
+      };
+      colors.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { state.color = b.dataset.c; sync(); } });
+      necks.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { state.neck = b.dataset.n; sync(); } });
+      sleeves.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { state.sleeve = b.dataset.s; sync(); } });
+      sizes.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && !b.disabled) { state.size = b.dataset.z; sync(); } });
+      sync();
+
+      related.innerHTML = PRODUCTS.filter((x) => x.id !== p.id).slice(0, 4).map((x) => productCard(x)).join('');
+    };
+  </script>
+</body>
+</html>

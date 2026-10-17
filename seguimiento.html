@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Seguir pedido · Apolaris</title>
+  <meta name="theme-color" content="#0f1630">
+  <link rel="icon" href="assets/icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Michroma&family=Cinzel:wght@400;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="seguimiento">
+
+  <section class="collection-hero">
+    <div class="container">
+      <div id="paid" hidden style="margin-bottom:1.4rem"><span class="mock-note" style="color:var(--positive)"><i class="fa-solid fa-check"></i> Pago aprobado · gracias por tu compra</span></div>
+      <span class="eyebrow">Seguimiento</span>
+      <h1>¿Dónde va mi pedido?</h1>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="track">
+      <form class="track-search" onsubmit="event.preventDefault()">
+        <div class="field"><label for="ord">Número de pedido</label><input class="input" id="ord" value="AP-1027"></div>
+        <div class="field"><label for="mail">Correo de la compra</label><input class="input" id="mail" value="cliente@correo.com"></div>
+        <button class="btn btn-primary">Consultar</button>
+      </form>
+
+      <div style="display:flex;justify-content:space-between;align-items:end;margin-top:3rem;gap:1rem;flex-wrap:wrap">
+        <div>
+          <span class="eyebrow">Pedido</span>
+          <div class="display" style="font-size:1.3rem;margin-top:.4rem">AP-1027</div>
+        </div>
+        <div style="text-align:right;font-size:.85rem;color:var(--muted-foreground)">Entrega estimada<br><strong style="color:var(--ink);font-size:1rem">Viernes 23 de octubre</strong></div>
+      </div>
+
+      <div class="timeline">
+        <div class="t done"><div class="dot"><i class="fa-solid fa-credit-card"></i></div><h4>Pagado</h4><small>16 oct · 10:42</small></div>
+        <div class="t done"><div class="dot"><i class="fa-solid fa-box-open"></i></div><h4>En preparación</h4><small>17 oct · 09:15</small></div>
+        <div class="t now"><div class="dot"><i class="fa-solid fa-truck-fast"></i></div><h4>Enviado</h4><small>18 oct · 16:30</small></div>
+        <div class="t"><div class="dot"><i class="fa-solid fa-house-chimney"></i></div><h4>Entregado</h4><small>Pendiente</small></div>
+      </div>
+
+      <div class="track-detail">
+        <div class="box">
+          <h3>Envío</h3>
+          <div style="display:grid;gap:.6rem;font-size:.9rem">
+            <div><span style="color:var(--muted-foreground)">Transportadora:</span> Servientrega</div>
+            <div><span style="color:var(--muted-foreground)">Guía:</span> <strong>2045 8813 0921</strong> <button class="icon-btn" aria-label="Copiar guía" style="width:1.8rem;height:1.8rem" onclick="toast('<i class=\'fa-regular fa-copy\'></i> Guía copiada')"><i class="fa-regular fa-copy"></i></button></div>
+            <div><span style="color:var(--muted-foreground)">Destino:</span> Bogotá D.C.</div>
+          </div>
+          <a class="btn btn-secondary btn-sm" href="#" style="margin-top:1.2rem"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver en la transportadora</a>
+          <h3 style="margin-top:2rem">Historial</h3>
+          <ul class="events">
+            <li><time>18 oct 16:30</time><span>Entregado a la transportadora</span></li>
+            <li><time>17 oct 09:15</time><span>Tu pedido está en preparación</span></li>
+            <li><time>16 oct 10:42</time><span>Pago aprobado (PSE)</span></li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Tu pedido</h3>
+          <div id="items" style="display:grid;gap:1rem"></div>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);margin-top:1.2rem;padding-top:1rem;font-weight:500"><span>Total</span><span>$198.000</span></div>
+          <div class="night" style="margin-top:1.6rem;padding:1.4rem;text-align:center">
+            <p style="margin:0 0 1rem;font-size:.9rem;color:var(--night-fg)">¿Algo no está bien? Escríbenos con tu código y te atendemos.</p>
+            <a class="btn btn-wa btn-sm" data-wa="Hola, quiero consultar mi pedido AP-1027"><i class="fa-brands fa-whatsapp"></i> Escribir por WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+  <script>
+    window.pageInit = () => {
+      if (new URLSearchParams(location.search).has('nuevo')) document.getElementById('paid').hidden = false;
+      document.getElementById('items').innerHTML = [[PRODUCTS[0], 'noche', 'M'], [PRODUCTS[2], 'blanco', 'L']].map(([p, c, z]) => `
+        <div style="display:grid;grid-template-columns:64px 1fr auto;gap:1rem;align-items:center">
+          <div style="background:var(--ivory);aspect-ratio:4/5;display:grid;place-items:center">${shirtSVG({ color: c, neck: p.neck, sleeve: p.sleeve, print: p.print })}</div>
+          <div style="font-size:.85rem"><div style="letter-spacing:.12em;text-transform:uppercase">${p.name}</div><div style="color:var(--muted-foreground)">${COLORS[c].name} · Talla ${z}</div></div>
+          <div style="font-size:.85rem">${cop.format(p.price)}</div>
+        </div>`).join('');
+    };
+  </script>
+</body>
+</html>

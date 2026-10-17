@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Apolaris · Tienda</title>
+  <meta name="theme-color" content="#f1ede6">
+  <link rel="icon" href="assets/icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Michroma&family=Cinzel:wght@400;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="home">
+
+  <!-- Hero tipo Cartier: video de marca a pantalla completa.
+       En producción: <video autoplay muted loop playsinline poster="…"> con el video del equipo. -->
+  <section class="hero-video" id="reel">
+    <div class="reel" aria-hidden="true">
+      <div class="shot shot-1 on">
+        <span class="cap">En el taller</span>
+        <div class="subject" data-shirt='{"color":"noche","neck":"redondo","print":"constelacion"}'></div>
+      </div>
+      <div class="shot shot-2">
+        <span class="cap">Tu idea, trazo a trazo</span>
+        <svg viewBox="0 0 400 260" fill="none">
+          <path class="draw" d="M60,70 L120,110 L190,96 L250,150 L230,210 L300,228 L320,170 L250,150" stroke="var(--glow)" stroke-width="1.6"/>
+          <g fill="var(--night-fg)">
+            <circle class="pop" style="animation-delay:.3s" cx="60" cy="70" r="7"/>
+            <circle class="pop" style="animation-delay:.9s" cx="120" cy="110" r="4.5"/>
+            <circle class="pop" style="animation-delay:1.4s" cx="190" cy="96" r="4.5"/>
+            <circle class="pop" style="animation-delay:1.9s" cx="250" cy="150" r="5"/>
+            <circle class="pop" style="animation-delay:2.4s" cx="230" cy="210" r="4.5"/>
+            <circle class="pop" style="animation-delay:2.9s" cx="300" cy="228" r="4.5"/>
+            <circle class="pop" style="animation-delay:3.3s" cx="320" cy="170" r="5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="shot shot-3">
+        <span class="cap">Hecho en Colombia</span>
+        <div class="row" id="parade"></div>
+      </div>
+    </div>
+    <div class="shade"></div>
+    <div class="overlay">
+      <div>
+        <span class="brand"><img src="assets/logo-blanco.png" alt="Apolaris · Actitud sin límites"></span>
+        <span class="eyebrow display">Colección Estrella del Norte · 2026</span>
+        <div class="ctas">
+          <a class="btn btn-glow" href="coleccion.html">Descubrir</a>
+          <a class="btn btn-light" href="personaliza.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Diseña la tuya</a>
+        </div>
+      </div>
+    </div>
+    <div class="reel-ui">
+      <div class="bars" id="bars"><span><i></i></span><span><i></i></span><span><i></i></span></div>
+      <button class="ctrl" id="play" aria-label="Pausar video"><i class="fa-solid fa-pause"></i></button>
+      <button class="ctrl" id="mute" aria-label="Activar sonido"><i class="fa-solid fa-volume-xmark"></i></button>
+      <span class="mock-note">Simulación · aquí va el video del equipo</span>
+    </div>
+  </section>
+
+  <!-- Banner de temporada (cambia con el tema) -->
+  <section id="temporada">
+    <a href="coleccion.html" class="season-banner base night" style="padding:1.4rem 1rem;place-items:center;text-align:center">
+      <span class="eyebrow display">Nuevo · Línea Órbita — polos de punto fino <i class="fa-solid fa-arrow-right-long" style="margin-left:.6rem"></i></span>
+    </a>
+    <a href="coleccion.html" class="season-banner navidad" style="padding:1.4rem 1rem;place-items:center;text-align:center;background:#7d0f22;color:#fff">
+      <span class="eyebrow display" style="color:#fff"><i class="fa-solid fa-gift"></i> &nbsp;Navidad Apolaris · regala una estrella — envío gratis desde $200.000</span>
+    </a>
+    <a href="coleccion.html" class="season-banner halloween" style="padding:1.4rem 1rem;place-items:center;text-align:center;background:#2a1238;color:#f7b267">
+      <span class="eyebrow display" style="color:#f7b267"><i class="fa-solid fa-ghost"></i> &nbsp;Noche de Halloween · diseños de edición nocturna</span>
+    </a>
+  </section>
+
+  <!-- Colecciones -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">Colecciones</span>
+        <h2>Encuentra tu órbita</h2>
+      </div>
+      <div class="tiles four" id="tiles"></div>
+    </div>
+  </section>
+
+  <!-- Bloque «constelación» -->
+  <section class="hero night">
+    <div class="stars"></div>
+    <div class="inner">
+      <div>
+        <span class="eyebrow display">Personaliza</span>
+        <h1>Viste tu propia <em>constelación</em></h1>
+        <p>Camisetas que nacen de tus ideas. Elige un modelo, sube tu diseño y nuestro equipo lo convierte en una prenda única.</p>
+        <div style="display:flex;gap:.8rem;margin-top:2.2rem;flex-wrap:wrap" class="hero-ctas">
+          <a class="btn btn-glow" href="personaliza.html">Empezar mi diseño</a>
+          <a class="btn btn-light" data-wa="Hola, quiero cotizar camisetas por cantidad (equipo/empresa)"><i class="fa-solid fa-people-group"></i> Pedidos por cantidad</a>
+        </div>
+      </div>
+      <div class="shirt-stage" data-shirt='{"color":"noche","neck":"redondo","print":"constelacion"}'></div>
+    </div>
+  </section>
+
+  <!-- Editorial tipo «Love» -->
+  <section class="editorial">
+    <div class="media">
+      <div style="width:62%" data-shirt='{"color":"arena","neck":"redondo","print":"texto"}'></div>
+      <span class="mock-note" style="position:absolute;bottom:1rem;left:1rem;color:var(--muted-foreground)">Foto de campaña pendiente</span>
+    </div>
+    <div class="copy">
+      <span class="eyebrow">La historia</span>
+      <h2>Un norte que <em class="serif" style="font-style:italic">se lleva puesto</em></h2>
+      <p>Polaris guía a quien navega de noche. Así queremos que se sienta cada prenda: una idea tuya, convertida en algo que te orienta y te representa. Cortes limpios, telas que respiran y estampados que no se borran.</p>
+      <div style="display:flex;gap:1.2rem;margin-top:2rem;align-items:center;flex-wrap:wrap">
+        <a class="btn btn-primary" href="coleccion.html">Descubrir</a>
+        <a class="btn btn-ghost" href="personaliza.html">Crea tu diseño</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Productos destacados -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">Selección</span>
+        <h2>Lo más deseado</h2>
+      </div>
+      <div class="carousel" id="featured"></div>
+      <div style="text-align:center;margin-top:2.5rem"><a class="btn btn-secondary" href="coleccion.html">Ver toda la colección</a></div>
+    </div>
+  </section>
+
+  <!-- Diseña la tuya -->
+  <section class="section night">
+    <div class="stars"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <div class="section-title">
+        <span class="eyebrow display">Cómo funciona</span>
+        <h2 style="color:var(--night-fg)">Tu idea, <span class="glow-text" style="font-style:italic">nuestro oficio</span></h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num">01</div><i class="fa-solid fa-shirt"></i><h3>Elige tu modelo</h3><p>Cuello V, redondo o polo. Manga corta o larga. El color que te defina.</p></div>
+        <div class="step"><div class="num">02</div><i class="fa-solid fa-cloud-arrow-up"></i><h3>Sube tu propuesta</h3><p>Una imagen, un boceto o una idea. Ubícala sobre la camiseta y mira cómo queda.</p></div>
+        <div class="step"><div class="num">03</div><i class="fa-solid fa-comments"></i><h3>Afinamos contigo</h3><p>Nuestro diseñador te escribe, ajustan detalles y lo producimos. ¿Muchas unidades? Te atiende comercial.</p></div>
+      </div>
+      <div style="text-align:center;margin-top:3rem"><a class="btn btn-glow" href="personaliza.html">Empezar mi diseño</a></div>
+    </div>
+  </section>
+
+  <!-- Editorial invertido -->
+  <section class="editorial reverse">
+    <div class="media" style="background:var(--night)">
+      <div style="width:62%" data-shirt='{"color":"negro","neck":"v","print":"eclipse"}'></div>
+    </div>
+    <div class="copy">
+      <span class="eyebrow">Colección El Arquero</span>
+      <h2 style="font-family:'Cinzel',serif;font-weight:600">Eclipse</h2>
+      <p>Cuello V entallado, algodón peinado y un estampado que juega con la luz y la sombra. Disponible en negro, vino y blanco hueso.</p>
+      <div style="margin-top:2rem"><a class="btn btn-primary" href="producto.html?p=eclipse">Ver Eclipse</a></div>
+    </div>
+  </section>
+
+  <!-- Instagram -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow"><i class="fa-brands fa-instagram"></i> @apolaris.24</span>
+        <h2>Síguenos en Instagram</h2>
+      </div>
+      <div class="insta" id="insta"></div>
+      <div style="text-align:center;margin-top:2rem"><a class="btn btn-secondary" href="https://www.instagram.com/apolaris.24/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> Ver perfil</a></div>
+    </div>
+  </section>
+
+  <script src="assets/app.js"></script>
+  <script>
+    window.pageInit = () => {
+      // Colecciones: cada una con su tipografía
+      document.getElementById('tiles').innerHTML = COLLECTIONS.map((c) => `
+        <a class="tile" href="coleccion.html?c=${c.id}" style="background:${c.bg}">
+          <div class="art">${shirtSVG({ color: c.look[0], print: c.look[1], neck: c.look[2] })}</div>
+          <div class="caption"><h3>${collectionTitle(c, 'color:#fff')}</h3><span class="btn-ghost btn" style="color:#fff;border-color:#fff">Ver colección</span></div>
+        </a>`).join('');
+
+      document.getElementById('featured').innerHTML = PRODUCTS.map((p) => productCard(p)).join('');
+      const bgs = ['#1b2a4a', '#e9e2d3', '#17181c', '#3c1a2a', '#d8e9ef', '#3a2d28'];
+      const looks = [['blanco', 'constelacion'], ['negro', 'arquero'], ['arena', 'texto'], ['cielo', 'ondas'], ['noche', 'nebula'], ['vino', 'estrella']];
+      document.getElementById('insta').innerHTML = looks.map(([c, pr], i) =>
+        `<a href="https://www.instagram.com/apolaris.24/" target="_blank" rel="noopener" style="background:${bgs[i]}">${shirtSVG({ color: c, print: pr, neck: i % 2 ? 'v' : 'redondo' })}</a>`).join('');
+
+      // Video simulado: tres tomas que se alternan, con barras de progreso, pausa y sonido
+      document.getElementById('parade').innerHTML = [['blanco', 'arquero', 'v'], ['negro', 'estrella', 'redondo'], ['arena', 'texto', 'redondo'], ['vino', 'none', 'polo'], ['cielo', 'ondas', 'v']]
+        .map(([c, p, n]) => `<div>${shirtSVG({ color: c, print: p, neck: n })}</div>`).join('');
+      const reel = document.getElementById('reel');
+      const shots = [...reel.querySelectorAll('.shot')];
+      const bars = [...document.querySelectorAll('#bars span')];
+      let i = 0;
+      let timer;
+      const restart = (el) => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; };
+      const show = (n) => {
+        i = n % shots.length;
+        shots.forEach((s, k) => {
+          s.classList.toggle('on', k === i);
+          if (k === i) s.querySelectorAll('.subject, .row, .draw, .pop').forEach(restart);
+        });
+        bars.forEach((b, k) => {
+          b.classList.toggle('done', k < i);
+          b.classList.toggle('on', k === i);
+          restart(b.querySelector('i'));
+        });
+      };
+      const play = () => { clearInterval(timer); timer = setInterval(() => show(i + 1), 6000); };
+      show(0);
+      play();
+      document.getElementById('play').addEventListener('click', (e) => {
+        const paused = reel.classList.toggle('paused');
+        e.currentTarget.innerHTML = paused ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-pause"></i>';
+        e.currentTarget.setAttribute('aria-label', paused ? 'Reproducir video' : 'Pausar video');
+        paused ? clearInterval(timer) : play();
+      });
+      document.getElementById('mute').addEventListener('click', (e) => {
+        const icon = e.currentTarget.querySelector('i');
+        icon.classList.toggle('fa-volume-xmark');
+        icon.classList.toggle('fa-volume-high');
+      });
+    };
+  </script>
+</body>
+</html>

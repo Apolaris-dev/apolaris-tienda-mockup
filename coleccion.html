@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Colecciones · Apolaris</title>
+  <meta name="theme-color" content="#0f1630">
+  <link rel="icon" href="assets/icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Michroma&family=Cinzel:wght@400;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="coleccion">
+
+  <nav class="col-tabs" id="tabs" aria-label="Colecciones"></nav>
+  <div class="container"><section class="col-hero" id="col-hero"></section></div>
+
+  <div class="container">
+    <div class="collection-layout">
+      <aside class="filters" id="filters" aria-label="Filtros">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 style="margin:0">Filtrar</h3>
+          <button class="icon-btn filter-open" aria-label="Cerrar filtros" onclick="document.getElementById('filters').classList.remove('open')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="group">
+          <h3>Cuello</h3>
+          <label class="check"><input type="checkbox" data-f="neck" value="redondo"> Redondo</label>
+          <label class="check"><input type="checkbox" data-f="neck" value="v"> V</label>
+          <label class="check"><input type="checkbox" data-f="neck" value="polo"> Polo</label>
+        </div>
+        <div class="group">
+          <h3>Manga</h3>
+          <label class="check"><input type="checkbox" data-f="sleeve" value="corta"> Corta</label>
+          <label class="check"><input type="checkbox" data-f="sleeve" value="larga"> Larga</label>
+        </div>
+        <div class="group">
+          <h3>Color</h3>
+          <div class="chips" id="color-filter"></div>
+        </div>
+        <div class="group">
+          <h3>Talla</h3>
+          <div class="chips">
+            <button class="chip">XS</button><button class="chip">S</button><button class="chip on">M</button><button class="chip">L</button><button class="chip">XL</button><button class="chip">XXL</button>
+          </div>
+        </div>
+        <div class="group" style="border:0">
+          <h3>Precio</h3>
+          <label class="check"><input type="checkbox"> Hasta $100.000</label>
+          <label class="check"><input type="checkbox"> $100.000 – $130.000</label>
+        </div>
+        <span class="mock-note" style="color:var(--muted-foreground)">Los filtros salen de los atributos configurados en el admin</span>
+      </aside>
+
+      <div>
+        <div class="toolbar">
+          <button class="btn btn-secondary btn-sm filter-open" onclick="document.getElementById('filters').classList.add('open')"><i class="fa-solid fa-sliders"></i> Filtrar</button>
+          <span class="count" id="count"></span>
+          <select class="select" style="width:auto;height:2.4rem;font-size:.8rem" aria-label="Ordenar">
+            <option>Destacados</option><option>Novedades</option><option>Precio: menor a mayor</option><option>Precio: mayor a menor</option>
+          </select>
+        </div>
+        <div class="products three" id="grid"></div>
+        <nav class="pager" aria-label="Paginación"><a href="#" class="on">1</a><a href="#">2</a><a href="#"><i class="fa-solid fa-chevron-right"></i></a></nav>
+      </div>
+    </div>
+    <nav class="col-next" id="col-next" aria-label="Otras colecciones"></nav>
+  </div>
+
+  <section class="section night" style="margin-top:5rem">
+    <div class="stars"></div>
+    <div class="container" style="text-align:center;position:relative;z-index:1">
+      <span class="eyebrow display">¿No está lo que buscas?</span>
+      <h2 class="serif" style="font-size:clamp(2rem,4vw,3rem);margin:.8rem 0 1.6rem;color:#fff">Diseñemos tu camiseta</h2>
+      <a class="btn btn-glow" href="personaliza.html">Personalizar</a>
+    </div>
+  </section>
+
+  <script src="assets/app.js"></script>
+  <script>
+    window.pageInit = () => {
+      const cid = new URLSearchParams(location.search).get('c');
+      const col = COLLECTIONS.find((c) => c.id === cid);
+      const idx = col ? COLLECTIONS.indexOf(col) : -1;
+      const pool = [...PRODUCTS, ...PRODUCTS.map((p) => ({ ...p, colors: [...p.colors].reverse(), tag: undefined }))];
+      const all = col ? pool.filter((p) => p.col === col.id) : pool.slice(0, 12);
+
+      // Tabs: cada colección con su propia letra
+      document.getElementById('tabs').innerHTML =
+        `<a href="coleccion.html" class="${col ? '' : 'on'}" style="font-family:var(--font-sans);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase">Todas</a>` +
+        COLLECTIONS.map((c) => `<a href="coleccion.html?c=${c.id}" class="${c === col ? 'on' : ''}">${collectionTitle(c, 'font-size:1.05rem')}</a>`).join('');
+
+      // Cabecera grande de la colección
+      const hero = document.getElementById('col-hero');
+      if (col) {
+        document.title = `${col.name} · Apolaris`;
+        hero.style.background = col.bg;
+        hero.style.color = col.fg;
+        hero.innerHTML = `
+          <span class="num">${String(idx + 1).padStart(2, '0')} / ${String(COLLECTIONS.length).padStart(2, '0')}</span>
+          <div class="copy"><span class="eyebrow" style="color:inherit;opacity:.8">Colección</span>
+            <h1>${collectionTitle(col, col.id === 'orbita' ? 'font-size:.55em' : '')}</h1><p>${col.tagline}.</p></div>
+          <div class="art">${shirtSVG({ color: col.look[0], print: col.look[1], neck: col.look[2] })}</div>`;
+        const prev = COLLECTIONS[(idx - 1 + COLLECTIONS.length) % COLLECTIONS.length];
+        const next = COLLECTIONS[(idx + 1) % COLLECTIONS.length];
+        document.getElementById('col-next').innerHTML = `
+          <a href="coleccion.html?c=${prev.id}"><span class="eyebrow"><i class="fa-solid fa-arrow-left-long"></i> Colección anterior</span><span class="t">${collectionTitle(prev)}</span></a>
+          <a href="coleccion.html?c=${next.id}"><span class="eyebrow">Siguiente colección <i class="fa-solid fa-arrow-right-long"></i></span><span class="t">${collectionTitle(next)}</span></a>`;
+      } else {
+        hero.style.background = 'var(--muted)';
+        hero.style.gridTemplateColumns = '1fr';
+        hero.innerHTML = `<div class="copy" style="text-align:center"><span class="eyebrow">Tienda</span>
+          <h1 class="serif" style="font-weight:300">Todas las colecciones</h1>
+          <p style="margin:0 auto">Explora cada universo Apolaris o filtra por cuello, manga y color. Si no está lo que imaginas, <a href="personaliza.html" style="text-decoration:underline">diséñalo con nosotros</a>.</p></div>`;
+      }
+      const colorBox = document.getElementById('color-filter');
+      colorBox.innerHTML = Object.entries(COLORS).map(([k, c]) =>
+        `<button class="color-dot" data-c="${k}" title="${c.name}" aria-label="${c.name}" style="background:${c.hex}"></button>`).join('');
+      const selected = { neck: new Set(), sleeve: new Set(), color: new Set() };
+      const render = () => {
+        const list = all.filter((p) =>
+          (!selected.neck.size || selected.neck.has(p.neck)) &&
+          (!selected.sleeve.size || selected.sleeve.has(p.sleeve)) &&
+          (!selected.color.size || p.colors.some((c) => selected.color.has(c))));
+        document.getElementById('grid').innerHTML = list.map((p) => {
+          const c = p.colors.find((x) => selected.color.has(x)) ?? p.colors[0];
+          return productCard(p, c);
+        }).join('') || '<p style="grid-column:1/-1;text-align:center;color:var(--muted-foreground)">Sin resultados con esos filtros.</p>';
+        document.getElementById('count').textContent = `${list.length} productos`;
+      };
+      document.querySelectorAll('[data-f]').forEach((i) => i.addEventListener('change', () => {
+        i.checked ? selected[i.dataset.f].add(i.value) : selected[i.dataset.f].delete(i.value);
+        render();
+      }));
+      colorBox.querySelectorAll('.color-dot').forEach((b) => b.addEventListener('click', () => {
+        b.classList.toggle('on');
+        b.classList.contains('on') ? selected.color.add(b.dataset.c) : selected.color.delete(b.dataset.c);
+        render();
+      }));
+      document.querySelectorAll('.filters .chips .chip').forEach((b) => b.addEventListener('click', () => b.classList.toggle('on')));
+      render();
+    };
+  </script>
+</body>
+</html>

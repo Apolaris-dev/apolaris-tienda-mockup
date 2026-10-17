@@ -1,0 +1,9 @@
+{
+  "name": "Apolaris",
+  "short_name": "Apolaris",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f1630",
+  "theme_color": "#0f1630",
+  "icons": [{ "src": "assets/icono.png", "sizes": "475x478", "type": "image/png" }]
+}

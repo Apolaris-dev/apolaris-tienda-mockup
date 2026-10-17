@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apolaris en el móvil</title>
+  <link rel="icon" href="assets/icono.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Michroma&family=Cinzel:wght@400;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    body { padding-bottom: 0 !important; overflow-x: hidden !important; overflow-y: auto !important; }
+    .head { text-align: center; padding: 3.5rem 1rem 1rem; position: relative; z-index: 1; }
+    .head h1 { font-family: var(--font-serif); font-weight: 300; font-size: clamp(2.2rem, 5vw, 3.4rem); margin: 1rem 0 .6rem; color: #fff; }
+    .head p { color: var(--night-muted); max-width: 36rem; margin: 0 auto 1.4rem; line-height: 1.7; }
+    .head .links { display: flex; gap: .7rem; justify-content: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body class="night" style="min-height:100vh">
+  <div class="stars"></div>
+  <div class="head">
+    <a href="index.html"><span class="brand lg glow"><img src="assets/logo-blanco.png" alt="Apolaris · Actitud sin límites"></span></a>
+    <h1>La tienda en tu bolsillo</h1>
+    <p>Una PWA: se instala desde el navegador en Android y iPhone, abre a pantalla completa con el ícono de Apolaris y funciona aun con mala señal.</p>
+    <div class="links">
+      <a class="btn btn-glow btn-sm" href="index.html">Ver versión escritorio</a>
+      <span class="mock-note" style="color:var(--night-fg);align-self:center">Cada teléfono es interactivo</span>
+    </div>
+  </div>
+  <div class="phones">
+    <div class="phone"><div class="frame"><iframe src="index.html" title="Inicio en móvil" loading="lazy"></iframe></div><p>Inicio</p></div>
+    <div class="phone"><div class="frame"><iframe src="producto.html?p=arquero" title="Ficha en móvil" loading="lazy"></iframe></div><p>Ficha de producto</p></div>
+    <div class="phone"><div class="frame"><iframe src="personaliza.html" title="Personalizador en móvil" loading="lazy"></iframe></div><p>Personaliza</p></div>
+  </div>
+</body>
+</html>

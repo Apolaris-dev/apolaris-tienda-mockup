@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Bolsa · Apolaris</title>
+  <meta name="theme-color" content="#0f1630">
+  <link rel="icon" href="assets/icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Michroma&family=Cinzel:wght@400;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="carrito">
+
+  <div class="container">
+    <section class="collection-hero" style="padding:3.5rem 0 2rem;text-align:left">
+      <span class="eyebrow">Tu bolsa</span>
+      <h1 style="margin:.5rem 0 0">Casi lista para despegar</h1>
+    </section>
+
+    <div class="cart">
+      <div>
+        <div id="lines"></div>
+        <div style="display:flex;justify-content:space-between;gap:1rem;margin-top:1.6rem;flex-wrap:wrap">
+          <a class="btn btn-ghost" href="coleccion.html"><i class="fa-solid fa-arrow-left"></i> Seguir comprando</a>
+          <span style="font-size:.8rem;color:var(--muted-foreground)"><i class="fa-regular fa-clock"></i> Reservamos tus prendas por 30 minutos</span>
+        </div>
+
+        <div class="box" style="margin-top:2.5rem">
+          <h3><i class="fa-solid fa-truck-fast"></i> &nbsp;Envío</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+            <div class="field"><label for="dep">Departamento</label>
+              <select class="select" id="dep"><option>Bogotá D.C.</option><option>Antioquia</option><option>Valle del Cauca</option><option>Atlántico</option><option>Santander</option></select></div>
+            <div class="field"><label for="ciu">Ciudad</label><input class="input" id="ciu" value="Bogotá"></div>
+            <div class="field" style="grid-column:1/-1"><label for="dir">Dirección</label><input class="input" id="dir" placeholder="Calle, número, apto"></div>
+          </div>
+          <p style="font-size:.8rem;color:var(--muted-foreground);margin:1rem 0 0" id="zone-msg"></p>
+        </div>
+      </div>
+
+      <aside class="summary">
+        <h2>Resumen</h2>
+        <div class="row"><span>Subtotal</span><span id="sub"></span></div>
+        <div class="row"><span>Envío</span><span id="ship"></span></div>
+        <div class="row" style="color:var(--muted-foreground);font-size:.8rem"><span>IVA incluido</span><span id="iva"></span></div>
+        <div class="field"><label for="cupon">Código de descuento</label>
+          <div style="display:flex;gap:.4rem"><input class="input" id="cupon" placeholder="POLARIS10"><button class="btn btn-secondary btn-sm" style="height:2.75rem">Aplicar</button></div></div>
+        <div class="row total"><span>Total</span><span id="total"></span></div>
+        <button class="btn btn-primary btn-block" onclick="pay(this)"><i class="fa-solid fa-lock"></i> Pagar con Wompi</button>
+        <div class="methods"><span><i class="fa-solid fa-building-columns"></i> PSE</span><span><i class="fa-solid fa-mobile-screen"></i> Nequi</span><span><i class="fa-brands fa-cc-visa"></i> Tarjeta</span><span><i class="fa-solid fa-landmark"></i> Bancolombia</span></div>
+        <div class="secure"><i class="fa-solid fa-shield-halved"></i> Pago procesado de forma segura. Compra como invitado o inicia sesión.</div>
+        <a class="btn btn-wa btn-block btn-sm" data-wa="Hola, tengo una pregunta antes de pagar mi pedido"><i class="fa-brands fa-whatsapp"></i> ¿Dudas? Escríbenos</a>
+      </aside>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+  <script>
+    const LINES = [
+      { p: PRODUCTS[0], color: 'noche', size: 'M', qty: 1 },
+      { p: PRODUCTS[2], color: 'blanco', size: 'L', qty: 1 },
+    ];
+    const SHIP = { 'Bogotá D.C.': 12000, Antioquia: 15000, 'Valle del Cauca': 15000, Atlántico: 18000, Santander: 16000 };
+    function renderCart() {
+      document.getElementById('lines').innerHTML = LINES.map((l, i) => `
+        <div class="cart-line">
+          <a class="thumb" href="producto.html?p=${l.p.id}">${shirtSVG({ color: l.color, neck: l.p.neck, sleeve: l.p.sleeve, print: l.p.print })}</a>
+          <div>
+            <h3>${l.p.name}</h3>
+            <div class="meta">${COLORS[l.color].name} · Talla ${l.size}<br>${l.p.desc}</div>
+            <div class="qty"><button aria-label="Menos" onclick="setQty(${i},-1)">−</button><span>${l.qty}</span><button aria-label="Más" onclick="setQty(${i},1)">+</button></div>
+            <div><button class="btn btn-ghost btn-sm" style="margin-top:.8rem;border:0;color:var(--muted-foreground)" onclick="LINES.splice(${i},1);renderCart()"><i class="fa-regular fa-trash-can"></i> Quitar</button></div>
+          </div>
+          <div class="line-price">${cop.format(l.p.price * l.qty)}</div>
+        </div>`).join('') || '<p style="padding:3rem 0;text-align:center;color:var(--muted-foreground)">Tu bolsa está vacía.</p>';
+      const sub = LINES.reduce((a, l) => a + l.p.price * l.qty, 0);
+      const dep = document.getElementById('dep').value;
+      const ship = sub >= 200000 || !sub ? 0 : SHIP[dep];
+      document.getElementById('sub').textContent = cop.format(sub);
+      document.getElementById('ship').textContent = ship ? cop.format(ship) : 'Gratis';
+      document.getElementById('iva').textContent = cop.format(Math.round(sub - sub / 1.19));
+      document.getElementById('total').textContent = cop.format(sub + ship);
+      document.getElementById('zone-msg').innerHTML = ship
+        ? `<i class="fa-solid fa-circle-info"></i> Llega en 2–4 días hábiles. Te faltan ${cop.format(200000 - sub)} para envío gratis.`
+        : '<i class="fa-solid fa-gift"></i> ¡Tienes envío gratis! Llega en 2–4 días hábiles.';
+      document.querySelectorAll('[data-cart-count]').forEach((el) => (el.textContent = LINES.reduce((a, l) => a + l.qty, 0)));
+    }
+    function setQty(i, d) { LINES[i].qty = Math.max(1, LINES[i].qty + d); renderCart(); }
+    function pay(btn) {
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Conectando con Wompi…';
+      setTimeout(() => { location.href = 'seguimiento.html?nuevo=1'; }, 1400);
+    }
+    window.pageInit = () => {
+      document.getElementById('dep').addEventListener('change', renderCart);
+      renderCart();
+    };
+  </script>
+</body>
+</html>

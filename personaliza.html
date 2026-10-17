@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Personaliza · Apolaris</title>
+  <meta name="theme-color" content="#0f1630">
+  <link rel="icon" href="assets/icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Michroma&family=Cinzel:wght@400;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="personaliza">
+
+  <section class="collection-hero" style="padding-bottom:2.5rem">
+    <div class="container">
+      <span class="eyebrow">Estudio de diseño</span>
+      <h1>Diseña tu camiseta</h1>
+      <p style="color:var(--muted-foreground);max-width:38rem;margin:0 auto;line-height:1.7">Elige el modelo, sube tu propuesta y ubícala. Nuestro diseñador la recibe, la afina contigo y te enviamos una prueba antes de producir.</p>
+    </div>
+  </section>
+
+  <div class="container" style="padding-bottom:5rem">
+    <ol class="stepper" id="stepper">
+      <li>Modelo</li><li>Opciones</li><li>Tu diseño</li><li>Cantidades</li><li>Enviar</li>
+    </ol>
+
+    <div class="studio">
+      <!-- Lienzo -->
+      <div class="canvas-wrap night">
+        <div class="stars"></div>
+        <div class="tools">
+          <div class="chips" id="views">
+            <button class="chip on" data-v="front">Frente</button>
+            <button class="chip" data-v="back">Espalda</button>
+          </div>
+          <button class="icon-btn" style="color:var(--night-fg)" title="Quitar imagen" aria-label="Quitar imagen" id="clear"><i class="fa-regular fa-trash-can"></i></button>
+        </div>
+        <div class="shirt" id="shirt">
+          <div id="shirt-svg"></div>
+          <div class="print-zone" id="zone"><span class="hint" id="hint">Área de impresión<br>sube tu imagen</span></div>
+        </div>
+        <div class="zoom">
+          <i class="fa-solid fa-magnifying-glass-minus"></i>
+          <input type="range" min="20" max="200" value="90" id="scale" aria-label="Tamaño de la imagen">
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+          <span style="margin-left:.6rem">Arrastra para mover</span>
+        </div>
+      </div>
+
+      <!-- Panel por pasos -->
+      <div class="panel" id="panel">
+        <!-- Paso 1 -->
+        <div data-step="0">
+          <span class="eyebrow">Paso 1</span>
+          <h3>Elige tu modelo base</h3>
+          <div class="model-pick" id="models" style="margin-top:1.2rem"></div>
+        </div>
+        <!-- Paso 2 -->
+        <div data-step="1" hidden>
+          <span class="eyebrow">Paso 2</span>
+          <h3>Ajusta los detalles</h3>
+          <div class="field" style="margin-top:1.2rem"><label>Cuello</label><div class="chips" id="necks"></div></div>
+          <div class="field" style="margin-top:1.2rem"><label>Manga</label><div class="chips" id="sleeves"></div></div>
+          <div class="field" style="margin-top:1.2rem"><label>Color</label><div class="chips" id="colors"></div></div>
+        </div>
+        <!-- Paso 3 -->
+        <div data-step="2" hidden>
+          <span class="eyebrow">Paso 3</span>
+          <h3>Sube tu propuesta</h3>
+          <label class="dropzone" style="margin-top:1.2rem;display:block">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            Arrastra o elige una imagen (PNG, JPG o SVG)<br><small>Para mejor calidad, mínimo 2000 px de ancho</small>
+            <input type="file" accept="image/*" id="file" hidden>
+          </label>
+          <div id="dpi" style="display:none;font-size:.8rem;margin-top:.8rem;color:var(--positive)"><i class="fa-solid fa-circle-check"></i> Resolución suficiente para imprimir</div>
+          <div class="field" style="margin-top:1.2rem">
+            <label for="idea">Cuéntanos tu idea</label>
+            <textarea class="input" id="idea" rows="3" placeholder="Ej: quiero el logo del equipo al frente y el número en la espalda, con letras doradas"></textarea>
+          </div>
+        </div>
+        <!-- Paso 4 -->
+        <div data-step="3" hidden>
+          <span class="eyebrow">Paso 4</span>
+          <h3>¿Cuántas necesitas?</h3>
+          <div class="sizes" style="margin-top:1.2rem">
+            <label>XS<input class="input" type="number" min="0" value="0"></label>
+            <label>S<input class="input" type="number" min="0" value="2"></label>
+            <label>M<input class="input" type="number" min="0" value="4"></label>
+            <label>L<input class="input" type="number" min="0" value="3"></label>
+            <label>XL<input class="input" type="number" min="0" value="1"></label>
+            <label>XXL<input class="input" type="number" min="0" value="0"></label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1.2rem">
+            <div class="field"><label for="nm">Nombre</label><input class="input" id="nm" placeholder="Tu nombre"></div>
+            <div class="field"><label for="ph">WhatsApp</label><input class="input" id="ph" placeholder="300 000 0000"></div>
+            <div class="field"><label for="em">Correo</label><input class="input" id="em" placeholder="tu@correo.com"></div>
+            <div class="field"><label for="dt">¿Para cuándo?</label><input class="input" id="dt" type="date"></div>
+          </div>
+          <label class="check" style="display:flex;gap:.6rem;font-size:.8rem;margin-top:1.2rem;color:var(--muted-foreground)"><input type="checkbox" checked style="accent-color:var(--ink)"> Acepto la política de tratamiento de datos</label>
+          <p style="font-size:.8rem;color:var(--muted-foreground);margin:0"><i class="fa-solid fa-circle-info"></i> Más de 24 unidades: te atiende el área comercial con precio por volumen.</p>
+        </div>
+        <!-- Paso 5 -->
+        <div data-step="4" hidden>
+          <div class="success show">
+            <i class="fa-solid fa-star" style="font-size:2rem;color:var(--gold)"></i>
+            <h3 style="margin-top:1rem">¡Recibimos tu diseño!</h3>
+            <div class="code">AP-0142</div>
+            <p style="color:var(--muted-foreground);line-height:1.7;font-size:.9rem">Nuestro diseñador lo revisa y te escribe en menos de 24 horas con una propuesta. Guarda este código para seguir tu solicitud.</p>
+            <div class="talk">
+              <a class="btn btn-primary" data-wa="Hola, soy del pedido AP-0142. Quiero hablar con diseño sobre mi propuesta."><i class="fa-solid fa-pen-nib"></i> Hablar con diseño</a>
+              <a class="btn btn-secondary" data-wa="Hola, soy del pedido AP-0142. Quiero cotizar por cantidad con el área comercial."><i class="fa-solid fa-briefcase"></i> Hablar con comercial</a>
+            </div>
+            <a class="btn btn-ghost" href="seguimiento.html" style="margin-top:1.4rem">Seguir mi solicitud</a>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;gap:.8rem;border-top:1px solid var(--border);padding-top:1.2rem" id="nav">
+          <button class="btn btn-secondary btn-sm" id="prev"><i class="fa-solid fa-arrow-left"></i> Atrás</button>
+          <button class="btn btn-primary btn-sm" id="next">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+  <script>
+    window.pageInit = () => {
+      const q = new URLSearchParams(location.search);
+      const s = {
+        step: 0,
+        color: q.get('color') ?? 'blanco',
+        neck: q.get('neck') ?? 'redondo',
+        sleeve: q.get('sleeve') ?? 'corta',
+        view: 'front',
+        art: { front: null, back: null },
+      };
+      const NECKS = { redondo: 'Redondo', v: 'Cuello V', polo: 'Polo' };
+      const SLEEVES = { corta: 'Corta', larga: 'Larga' };
+      const MODELS = [
+        { neck: 'redondo', sleeve: 'corta', label: 'Clásica' },
+        { neck: 'v', sleeve: 'corta', label: 'Cuello V' },
+        { neck: 'polo', sleeve: 'corta', label: 'Polo' },
+        { neck: 'redondo', sleeve: 'larga', label: 'Manga larga' },
+        { neck: 'v', sleeve: 'larga', label: 'Deportiva' },
+        { neck: 'polo', sleeve: 'larga', label: 'Polo larga' },
+      ];
+
+      const $ = (id) => document.getElementById(id);
+      const zone = $('zone');
+
+      const drawShirt = () => {
+        $('shirt-svg').innerHTML = shirtSVG({ color: s.color, neck: s.neck, sleeve: s.sleeve, view: s.view });
+        zone.style.top = s.view === 'back' ? '22%' : '30%';
+        zone.style.height = s.view === 'back' ? '50%' : '40%';
+        zone.querySelector('img')?.remove();
+        const art = s.art[s.view];
+        $('hint').style.display = art ? 'none' : '';
+        if (art) {
+          const img = new Image();
+          img.src = art.src;
+          img.alt = 'Tu diseño';
+          img.style.mixBlendMode = isDark(COLORS[s.color].hex) ? 'normal' : 'multiply';
+          zone.appendChild(img);
+          placeArt();
+          makeDraggable(img);
+        }
+      };
+      const placeArt = () => {
+        const art = s.art[s.view];
+        const img = zone.querySelector('img');
+        if (!art || !img) return;
+        img.style.width = `${art.scale}%`;
+        img.style.left = `${art.x}%`;
+        img.style.top = `${art.y}%`;
+        img.style.transform = 'translate(-50%,-50%)';
+      };
+      const makeDraggable = (img) => {
+        let start = null;
+        img.addEventListener('pointerdown', (e) => {
+          img.setPointerCapture(e.pointerId);
+          img.style.cursor = 'grabbing';
+          start = { x: e.clientX, y: e.clientY, ox: s.art[s.view].x, oy: s.art[s.view].y };
+        });
+        img.addEventListener('pointermove', (e) => {
+          if (!start) return;
+          const r = zone.getBoundingClientRect();
+          s.art[s.view].x = start.ox + ((e.clientX - start.x) / r.width) * 100;
+          s.art[s.view].y = start.oy + ((e.clientY - start.y) / r.height) * 100;
+          placeArt();
+        });
+        img.addEventListener('pointerup', () => { start = null; img.style.cursor = 'grab'; });
+      };
+
+      $('models').innerHTML = MODELS.map((m, i) =>
+        `<button data-i="${i}">${shirtSVG({ color: s.color, neck: m.neck, sleeve: m.sleeve })}${m.label}</button>`).join('');
+      $('necks').innerHTML = Object.entries(NECKS).map(([k, l]) => `<button class="chip" data-n="${k}">${l}</button>`).join('');
+      $('sleeves').innerHTML = Object.entries(SLEEVES).map(([k, l]) => `<button class="chip" data-s="${k}">${l}</button>`).join('');
+      $('colors').innerHTML = Object.entries(COLORS).map(([k, c]) => `<button class="color-dot" data-c="${k}" title="${c.name}" aria-label="${c.name}" style="background:${c.hex}"></button>`).join('');
+
+      const sync = () => {
+        $('models').querySelectorAll('button').forEach((b) => {
+          const m = MODELS[b.dataset.i];
+          b.classList.toggle('on', m.neck === s.neck && m.sleeve === s.sleeve);
+        });
+        $('necks').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.n === s.neck));
+        $('sleeves').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === s.sleeve));
+        $('colors').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.c === s.color));
+        $('views').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.v === s.view));
+        document.querySelectorAll('#stepper li').forEach((li, i) => {
+          li.classList.toggle('done', i < s.step);
+          li.classList.toggle('on', i === s.step);
+        });
+        document.querySelectorAll('[data-step]').forEach((el) => (el.hidden = Number(el.dataset.step) !== s.step));
+        $('prev').style.visibility = s.step === 0 || s.step === 4 ? 'hidden' : 'visible';
+        $('next').style.display = s.step === 4 ? 'none' : '';
+        $('next').innerHTML = s.step === 3
+          ? '<i class="fa-solid fa-paper-plane"></i> Enviar al diseñador'
+          : 'Continuar <i class="fa-solid fa-arrow-right"></i>';
+        drawShirt();
+      };
+
+      $('models').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { Object.assign(s, MODELS[b.dataset.i]); sync(); } });
+      $('necks').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.neck = b.dataset.n; sync(); } });
+      $('sleeves').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.sleeve = b.dataset.s; sync(); } });
+      $('colors').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.color = b.dataset.c; sync(); } });
+      $('views').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.view = b.dataset.v; $('scale').value = s.art[s.view]?.scale ?? 90; sync(); } });
+      $('next').addEventListener('click', () => { s.step = Math.min(4, s.step + 1); sync(); });
+      $('prev').addEventListener('click', () => { s.step = Math.max(0, s.step - 1); sync(); });
+      $('scale').addEventListener('input', (e) => { if (s.art[s.view]) { s.art[s.view].scale = Number(e.target.value); placeArt(); } });
+      $('clear').addEventListener('click', () => { s.art[s.view] = null; drawShirt(); });
+      $('file').addEventListener('change', (e) => {
+        const f = e.target.files?.[0];
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const probe = new Image();
+          probe.onload = () => {
+            const ok = probe.naturalWidth >= 1500;
+            const dpi = $('dpi');
+            dpi.style.display = 'block';
+            dpi.style.color = ok ? 'var(--positive)' : 'var(--negative)';
+            dpi.innerHTML = ok
+              ? '<i class="fa-solid fa-circle-check"></i> Resolución suficiente para imprimir'
+              : `<i class="fa-solid fa-triangle-exclamation"></i> Imagen de ${probe.naturalWidth}px: podría verse pixelada. El diseñador te ayudará.`;
+          };
+          probe.src = reader.result;
+          s.art[s.view] = { src: reader.result, x: 50, y: 50, scale: 90 };
+          $('scale').value = 90;
+          drawShirt();
+        };
+        reader.readAsDataURL(f);
+      });
+      sync();
+    };
+  </script>
+</body>
+</html>
