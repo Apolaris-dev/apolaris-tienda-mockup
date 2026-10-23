@@ -854,28 +854,7 @@ details.acc p { color: var(--muted-foreground); line-height: 1.7; font-size: 0.9
 /* ---------- Nieve: azul en modo claro para que contraste ---------- */
 :root:not([data-mode='dark']) .fx-flake { text-shadow: 0 0 3px rgba(79, 134, 207, 0.35); }
 
-/* ---------- Mascota Apolo ---------- */
-.mascot { display: none; position: fixed; bottom: 0.2rem; left: 0; width: 150px; z-index: 46; pointer-events: none; animation: walk 38s linear infinite; animation-delay: 2s; transform: translateX(-180px); }
-body[data-season='navidad'] .mascot { display: block; }
-.mascot svg { width: 100%; display: block; overflow: visible; }
-.mascot .m-body { animation: bob 0.32s ease-in-out infinite alternate; }
-.mascot .leg { transform-box: fill-box; transform-origin: 50% 0; animation: step 0.64s ease-in-out infinite alternate; }
-.mascot .l2, .mascot .l3 { animation-delay: -0.32s; }
-.mascot .tail { transform-box: fill-box; transform-origin: 100% 100%; animation: wag 0.3s ease-in-out infinite alternate; }
-.mascot .ear { transform-box: fill-box; transform-origin: 60% 0; animation: earflop 0.64s ease-in-out infinite alternate; }
-.mascot .bubble {
-  position: absolute; bottom: 100%; left: 40%; white-space: nowrap;
-  background: var(--surface); color: var(--foreground); border: 1px solid var(--border);
-  font-size: 0.7rem; letter-spacing: 0.04em; padding: 0.4rem 0.7rem; border-radius: 999px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); opacity: 0; animation: bubble 38s linear infinite; animation-delay: 2s;
-}
-@keyframes walk { 0% { transform: translateX(-180px); } 55% { transform: translateX(calc(100vw + 30px)); } 100% { transform: translateX(calc(100vw + 30px)); } }
-@keyframes bubble { 0%, 18% { opacity: 0; } 21%, 33% { opacity: 1; } 36%, 100% { opacity: 0; } }
-@keyframes bob { to { transform: translateY(-2px); } }
-@keyframes step { from { transform: rotate(16deg); } to { transform: rotate(-16deg); } }
-@keyframes wag { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
-@keyframes earflop { from { transform: rotate(-4deg); } to { transform: rotate(5deg); } }
-@media (prefers-reduced-motion: reduce) { .mascot { display: none !important; } .reel .shot * { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .reel .shot * { animation: none !important; } }
 
 @media (max-width: 1100px) {
   .tiles.four { grid-template-columns: repeat(2, 1fr); }
@@ -896,7 +875,6 @@ body[data-season='navidad'] .mascot { display: block; }
   .col-hero p { margin: 0 auto; }
   .col-hero .art svg { width: 62vw; }
   .col-next .t { font-size: 1.5rem; }
-  .mascot { bottom: 4.5rem; width: 110px; }
 }
 
 /* Ajustes: navbar sin solaparse, logo legible sobre el video, controles a la derecha */

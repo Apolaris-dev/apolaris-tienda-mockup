@@ -334,46 +334,6 @@ function applySeason(key) {
   }
 }
 
-/* ---------- Mascota: Apolo, cocker spaniel (pasa por la pantalla en Navidad) ---------- */
-function mascot() {
-  const fur = '#c46a2e';
-  const furDark = '#9e4c1d';
-  const ear = '#a9521f';
-  const cream = '#f3e1c8';
-  const leg = (x, color, cls) => `<g class="leg ${cls}"><path d="M${x},82 L${x - 1},122 Q${x - 1},129 ${x + 6},129 L${x + 13},129 Q${x + 16},125 ${x + 11},121 L${x + 11},82 Z" fill="${color}"/><path d="M${x - 1},121 Q${x - 1},129 ${x + 6},129 L${x + 13},129 Q${x + 16},125 ${x + 11},121 Z" fill="${cream}"/></g>`;
-  return `<div class="mascot" aria-hidden="true">
-    <div class="bubble">Soy Apolo · ¡Feliz Navidad!</div>
-    <svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="110" cy="132" rx="70" ry="5" fill="rgba(0,0,0,.12)"/>
-      <g class="m-body">
-        <path class="tail" d="M50,64 C34,58 22,46 18,30 C16,23 24,22 27,29 C32,40 40,50 56,57 Z" fill="${fur}"/>
-        <path d="M24,34 q-6,4 -4,10 M30,44 q-6,4 -3,10 M38,52 q-5,5 -1,10" stroke="${furDark}" stroke-width="2" fill="none" stroke-linecap="round"/>
-        ${leg(62, furDark, 'l2')}${leg(134, furDark, 'l4')}
-        <ellipse cx="96" cy="74" rx="52" ry="24" fill="${fur}"/>
-        <path d="M60,82 q4,14 14,18 M82,92 q2,10 8,14" stroke="${furDark}" stroke-width="2" fill="none" stroke-linecap="round"/>
-        ${leg(72, fur, 'l1')}${leg(142, fur, 'l3')}
-        <path d="M62,56 Q96,44 130,54 Q140,74 134,94 Q96,104 60,94 Q52,74 62,56 Z" fill="#1b2a4a"/>
-        <path d="M128,56 Q138,74 132,94" stroke="#2c3f68" stroke-width="5" fill="none"/>
-        <path d="M98,66 l2.4,5.2 5.6.6-4.2,3.8 1.2,5.6-5-2.9-5,2.9 1.2-5.6-4.2-3.8 5.6-.6z" fill="#e9c46a"/>
-        <text x="96" y="91" text-anchor="middle" font-family="Michroma, sans-serif" font-size="6.5" letter-spacing="1.6" fill="#fff">APOLARIS</text>
-        <path d="M120,62 Q128,42 144,36 L160,52 Q148,70 132,82 Z" fill="${fur}"/>
-        <path d="M134,58 Q140,66 136,78" stroke="${cream}" stroke-width="6" fill="none" stroke-linecap="round"/>
-        <circle cx="156" cy="42" r="19" fill="${fur}"/>
-        <path d="M160,26 Q166,34 168,44" stroke="${cream}" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/>
-        <ellipse cx="174" cy="51" rx="13" ry="9.5" fill="${cream}"/>
-        <ellipse cx="186" cy="47" rx="4.6" ry="4" fill="#1a1412"/>
-        <path d="M176,58 Q180,61 185,57" stroke="#7a3e1c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-        <circle cx="164" cy="38" r="3.5" fill="#1a1412"/><circle cx="165.2" cy="36.8" r="1.1" fill="#fff"/>
-        <path class="ear" d="M146,30 C132,30 127,50 129,68 C130,80 139,88 148,82 C153,78 148,72 152,66 C157,58 155,40 146,30 Z" fill="${ear}"/>
-        <path d="M136,48 q-3,8 0,16 M142,52 q-2,8 1,18" stroke="${furDark}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-        <path d="M144,22 L171,17 C165,5 149,-1 132,6 Z" fill="#c62828"/>
-        <rect x="140" y="17" width="35" height="9" rx="4.5" fill="#fff" transform="rotate(-9 157 21)"/>
-        <circle cx="131" cy="7" r="5.5" fill="#fff"/>
-      </g>
-    </svg>
-  </div>`;
-}
-
 /* ---------- Arranque ---------- */
 function mountChrome() {
   const page = document.body.dataset.page;
@@ -383,7 +343,7 @@ function mountChrome() {
     <div class="theme-switch" role="group" aria-label="Tema de temporada (demo)"><span class="lbl">Tema</span>
       ${Object.entries(SEASONS).map(([k, s]) => `<button data-s="${k}">${s.label}</button>`).join('')}
     </div>
-    <div class="fx-layer" aria-hidden="true"></div>${mascot()}`);
+    <div class="fx-layer" aria-hidden="true"></div>`);
   document.querySelectorAll('.theme-switch button').forEach((b) => b.addEventListener('click', () => applySeason(b.dataset.s)));
   const fromUrl = new URLSearchParams(location.search).get('tema');
   applySeason(SEASONS[fromUrl] ? fromUrl : store.get('apolaris-season', 'base'));
