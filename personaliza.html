@@ -37,17 +37,21 @@
             <button class="chip on" data-v="front">Frente</button>
             <button class="chip" data-v="back">Espalda</button>
           </div>
-          <button class="icon-btn" style="color:var(--night-fg)" title="Quitar imagen" aria-label="Quitar imagen" id="clear"><i class="fa-regular fa-trash-can"></i></button>
+          <div style="display:flex;gap:.3rem">
+            <button class="chip" id="cover" title="Sublimación total: la imagen cubre toda la camiseta"><i class="fa-solid fa-expand"></i> Cubrir toda</button>
+            <button class="icon-btn" style="color:var(--night-fg)" title="Quitar imagen" aria-label="Quitar imagen" id="clear"><i class="fa-regular fa-trash-can"></i></button>
+          </div>
         </div>
         <div class="shirt" id="shirt">
           <div id="shirt-svg"></div>
-          <div class="print-zone" id="zone"><span class="hint" id="hint">Área de impresión<br>sube tu imagen</span></div>
+          <span class="hint whole" id="hint">Toda la camiseta es editable<br>sube tu imagen y muévela donde quieras</span>
         </div>
         <div class="zoom">
-          <i class="fa-solid fa-magnifying-glass-minus"></i>
-          <input type="range" min="20" max="200" value="90" id="scale" aria-label="Tamaño de la imagen">
-          <i class="fa-solid fa-magnifying-glass-plus"></i>
-          <span style="margin-left:.6rem">Arrastra para mover</span>
+          <i class="fa-solid fa-magnifying-glass-minus" title="Tamaño"></i>
+          <input type="range" min="30" max="380" value="110" id="scale" aria-label="Tamaño de la imagen">
+          <i class="fa-solid fa-rotate" title="Giro" style="margin-left:.6rem"></i>
+          <input type="range" min="-180" max="180" value="0" id="rotate" aria-label="Giro de la imagen">
+          <span class="drag-tip">Arrastra para mover · pecho, mangas o espalda</span>
         </div>
       </div>
 
@@ -76,6 +80,7 @@
             Arrastra o elige una imagen (PNG, JPG o SVG)<br><small>Para mejor calidad, mínimo 2000 px de ancho</small>
             <input type="file" accept="image/*" id="file" hidden>
           </label>
+          <button class="btn btn-ghost btn-sm" id="sample" style="margin-top:.8rem"><i class="fa-solid fa-image"></i> Probar con un diseño de ejemplo</button>
           <div id="dpi" style="display:none;font-size:.8rem;margin-top:.8rem;color:var(--positive)"><i class="fa-solid fa-circle-check"></i> Resolución suficiente para imprimir</div>
           <div class="field" style="margin-top:1.2rem">
             <label for="idea">Cuéntanos tu idea</label>
@@ -150,49 +155,41 @@
       ];
 
       const $ = (id) => document.getElementById(id);
-      const zone = $('zone');
-
+      // El diseño vive dentro del SVG, recortado con la silueta completa (no una zona fija).
       const drawShirt = () => {
-        $('shirt-svg').innerHTML = shirtSVG({ color: s.color, neck: s.neck, sleeve: s.sleeve, view: s.view });
-        zone.style.top = s.view === 'back' ? '22%' : '30%';
-        zone.style.height = s.view === 'back' ? '50%' : '40%';
-        zone.querySelector('img')?.remove();
         const art = s.art[s.view];
+        $('shirt-svg').innerHTML = shirtSVG({ color: s.color, neck: s.neck, sleeve: s.sleeve, view: s.view, art, guide: true });
         $('hint').style.display = art ? 'none' : '';
-        if (art) {
-          const img = new Image();
-          img.src = art.src;
-          img.alt = 'Tu diseño';
-          img.style.mixBlendMode = isDark(COLORS[s.color].hex) ? 'normal' : 'multiply';
-          zone.appendChild(img);
-          placeArt();
-          makeDraggable(img);
-        }
+        const el = $('shirt-svg').querySelector('.user-art');
+        if (el) makeDraggable(el);
       };
-      const placeArt = () => {
-        const art = s.art[s.view];
-        const img = zone.querySelector('img');
-        if (!art || !img) return;
-        img.style.width = `${art.scale}%`;
-        img.style.left = `${art.x}%`;
-        img.style.top = `${art.y}%`;
-        img.style.transform = 'translate(-50%,-50%)';
-      };
-      const makeDraggable = (img) => {
+      const makeDraggable = (el) => {
         let start = null;
-        img.addEventListener('pointerdown', (e) => {
-          img.setPointerCapture(e.pointerId);
-          img.style.cursor = 'grabbing';
-          start = { x: e.clientX, y: e.clientY, ox: s.art[s.view].x, oy: s.art[s.view].y };
+        el.style.cursor = 'grab';
+        el.style.touchAction = 'none';
+        el.addEventListener('pointerdown', (e) => {
+          el.setPointerCapture(e.pointerId);
+          el.style.cursor = 'grabbing';
+          const k = 300 / $('shirt-svg').querySelector('svg').getBoundingClientRect().width;
+          start = { x: e.clientX, y: e.clientY, ox: s.art[s.view].x, oy: s.art[s.view].y, k };
         });
-        img.addEventListener('pointermove', (e) => {
+        el.addEventListener('pointermove', (e) => {
           if (!start) return;
-          const r = zone.getBoundingClientRect();
-          s.art[s.view].x = start.ox + ((e.clientX - start.x) / r.width) * 100;
-          s.art[s.view].y = start.oy + ((e.clientY - start.y) / r.height) * 100;
-          placeArt();
+          const a = s.art[s.view];
+          a.x = start.ox + (e.clientX - start.x) * start.k;
+          a.y = start.oy + (e.clientY - start.y) * start.k;
+          el.setAttribute('x', a.x - a.w / 2);
+          el.setAttribute('y', a.y - a.h / 2);
+          el.setAttribute('transform', `rotate(${a.r} ${a.x} ${a.y})`);
         });
-        img.addEventListener('pointerup', () => { start = null; img.style.cursor = 'grab'; });
+        el.addEventListener('pointerup', () => { start = null; drawShirt(); });
+      };
+      const resize = (w) => {
+        const a = s.art[s.view];
+        if (!a) return;
+        a.w = w;
+        a.h = w / a.ratio;
+        drawShirt();
       };
 
       $('models').innerHTML = MODELS.map((m, i) =>
@@ -227,11 +224,43 @@
       $('necks').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.neck = b.dataset.n; sync(); } });
       $('sleeves').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.sleeve = b.dataset.s; sync(); } });
       $('colors').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.color = b.dataset.c; sync(); } });
-      $('views').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { s.view = b.dataset.v; $('scale').value = s.art[s.view]?.scale ?? 90; sync(); } });
+      $('views').addEventListener('click', (e) => {
+        const b = e.target.closest('button');
+        if (!b) return;
+        s.view = b.dataset.v;
+        $('scale').value = s.art[s.view]?.w ?? 110;
+        $('rotate').value = s.art[s.view]?.r ?? 0;
+        sync();
+      });
       $('next').addEventListener('click', () => { s.step = Math.min(4, s.step + 1); sync(); });
       $('prev').addEventListener('click', () => { s.step = Math.max(0, s.step - 1); sync(); });
-      $('scale').addEventListener('input', (e) => { if (s.art[s.view]) { s.art[s.view].scale = Number(e.target.value); placeArt(); } });
+      $('scale').addEventListener('input', (e) => resize(Number(e.target.value)));
+      $('rotate').addEventListener('input', (e) => { if (s.art[s.view]) { s.art[s.view].r = Number(e.target.value); drawShirt(); } });
+      // Sublimación total: la imagen cubre la silueta entera, mangas incluidas
+      $('cover').addEventListener('click', () => {
+        const a = s.art[s.view];
+        if (!a) return;
+        // caja que contiene la silueta completa (cuerpo + mangas) en unidades del viewBox
+        const [bw, bh] = [300, 312];
+        const [w, h] = a.ratio > bw / bh ? [bh * a.ratio, bh] : [bw, bw / a.ratio];
+        Object.assign(a, { x: 150, y: 160, w, h, r: 0 });
+        $('scale').value = a.w;
+        $('rotate').value = 0;
+        drawShirt();
+      });
       $('clear').addEventListener('click', () => { s.art[s.view] = null; drawShirt(); });
+      const loadArt = (src, cover = false) => {
+        const probe = new Image();
+        probe.src = src;
+        return probe.decode().then(() => {
+          const ratio = probe.naturalWidth / probe.naturalHeight || 1;
+          s.art[s.view] = { src, ratio, x: 150, y: 150, w: 110, h: 110 / ratio, r: 0 };
+          $('scale').value = 110;
+          $('rotate').value = 0;
+          if (cover) $('cover').click(); else drawShirt();
+        });
+      };
+      $('sample').addEventListener('click', () => loadArt('assets/diseno-ejemplo.svg'));
       $('file').addEventListener('change', (e) => {
         const f = e.target.files?.[0];
         if (!f) return;
@@ -248,13 +277,14 @@
               : `<i class="fa-solid fa-triangle-exclamation"></i> Imagen de ${probe.naturalWidth}px: podría verse pixelada. El diseñador te ayudará.`;
           };
           probe.src = reader.result;
-          s.art[s.view] = { src: reader.result, x: 50, y: 50, scale: 90 };
-          $('scale').value = 90;
-          drawShirt();
+          loadArt(reader.result);
         };
         reader.readAsDataURL(f);
       });
       sync();
+      // Enlaces de demo: ?ejemplo=1 carga el diseño de ejemplo; ?ejemplo=cubrir lo extiende a toda la camiseta
+      const demo = q.get('ejemplo');
+      if (demo) { s.step = 2; sync(); loadArt('assets/diseno-ejemplo.svg', demo === 'cubrir'); }
     };
   </script>
 </body>

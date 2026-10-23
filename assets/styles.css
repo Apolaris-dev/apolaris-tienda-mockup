@@ -920,3 +920,13 @@ body[data-season='navidad'] .mascot { display: block; }
   .reel-ui { right: 4.8rem; bottom: 1.2rem; }
   .reel-ui .bars { width: 90px; }
 }
+
+/* Personalizador: toda la camiseta es editable (la silueta recorta el diseño) */
+.canvas-wrap .shirt .hint.whole { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--glow); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5); }
+.canvas-wrap .zoom input[type='range'] { min-width: 0; }
+.canvas-wrap .tools #cover { background: transparent; color: var(--night-fg); border-color: rgba(255, 255, 255, 0.3); padding: 0.45rem 0.8rem; }
+.canvas-wrap .tools #cover:hover { border-color: var(--glow); color: var(--glow); }
+@media (max-width: 860px) { .canvas-wrap .zoom .drag-tip { display: none; } }
+/* Solo el diseño del cliente recibe el arrastre; sombras, cuello y costuras lo dejan pasar */
+#shirt-svg svg * { pointer-events: none; }
+#shirt-svg .user-art { pointer-events: auto; }

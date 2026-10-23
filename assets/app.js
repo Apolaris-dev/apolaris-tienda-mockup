@@ -96,7 +96,9 @@ function printArt(kind, dark) {
   }
 }
 
-function shirtSVG({ color = 'negro', neck = 'redondo', sleeve = 'corta', print = 'none', view = 'front' } = {}) {
+/* `art`: diseño del cliente en unidades del viewBox (centro x/y, ancho w, alto h, rotación r).
+   Se recorta con la silueta completa: puede ir en cualquier parte de la camiseta, mangas incluidas. */
+function shirtSVG({ color = 'negro', neck = 'redondo', sleeve = 'corta', print = 'none', view = 'front', art = null, guide = false } = {}) {
   const id = `s${++svgSeq}`;
   const hex = COLORS[color]?.hex ?? color;
   const dark = isDark(hex);
@@ -148,13 +150,14 @@ function shirtSVG({ color = 'negro', neck = 'redondo', sleeve = 'corta', print =
       <clipPath id="${id}c"><path d="${body}"/></clipPath>
     </defs>
     <path d="${body}" fill="${hex}"/>
-    <g clip-path="url(#${id}c)">${back ? '' : printArt(print, dark)}</g>
+    <g clip-path="url(#${id}c)">${back ? '' : printArt(print, dark)}${art ? `<image class="user-art" href="${art.src}" x="${art.x - art.w / 2}" y="${art.y - art.h / 2}" width="${art.w}" height="${art.h}" preserveAspectRatio="none" transform="rotate(${art.r ?? 0} ${art.x} ${art.y})" style="mix-blend-mode:${dark ? 'normal' : 'multiply'}"/>` : ''}</g>
     <path d="${body}" fill="url(#${id}g)"/>
     ${neckInner}${extra}
     <path d="M80,40 Q77,${armL - 30} 82,${armL} M220,40 Q223,${armL - 30} 218,${armL}" stroke="${seam}" stroke-width="1.5" fill="none"/>
     <path d="M88,292 Q150,300 212,292" stroke="${seam}" stroke-width="1.5" fill="none"/>
     ${cuffs}
     <path d="${body}" fill="none" stroke="${dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.18)'}" stroke-width="1"/>
+    ${guide ? `<path d="${body}" fill="none" stroke="var(--glow)" stroke-width="1.2" stroke-dasharray="5 4" opacity=".9"/>` : ''}
   </svg>`;
 }
 

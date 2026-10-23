@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b2a6b"/><stop offset=".45" stop-color="#7b3fa0"/><stop offset=".75" stop-color="#e2677e"/><stop offset="1" stop-color="#f6b26b"/>
+    </linearGradient>
+    <radialGradient id="r" cx=".3" cy=".3" r=".6"><stop offset="0" stop-color="#9fe3f5" stop-opacity=".55"/><stop offset="1" stop-color="#9fe3f5" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#g)"/>
+  <rect width="600" height="600" fill="url(#r)"/>
+  <g stroke="#fff" stroke-opacity=".55" stroke-width="2" fill="none">
+    <path d="M90 140 L190 210 L300 180 L380 270 L350 380 L470 410 L500 300 L380 270"/>
+    <path d="M0 520 Q150 440 300 520 T600 520" stroke-opacity=".35" stroke-width="6"/>
+    <path d="M0 560 Q150 480 300 560 T600 560" stroke-opacity=".25" stroke-width="6"/>
+  </g>
+  <g fill="#fff">
+    <circle cx="90" cy="140" r="10"/><circle cx="190" cy="210" r="6"/><circle cx="300" cy="180" r="6"/><circle cx="380" cy="270" r="7"/>
+    <circle cx="350" cy="380" r="6"/><circle cx="470" cy="410" r="6"/><circle cx="500" cy="300" r="7"/>
+    <circle cx="40" cy="40" r="2"/><circle cx="560" cy="80" r="2.5"/><circle cx="520" cy="190" r="1.5"/><circle cx="60" cy="330" r="2"/><circle cx="240" cy="60" r="1.8"/><circle cx="430" cy="120" r="2"/><circle cx="150" cy="420" r="2"/>
+  </g>
+  <text x="300" y="470" text-anchor="middle" font-family="Michroma, Arial, sans-serif" font-size="34" letter-spacing="12" fill="#fff" fill-opacity=".9">APOLARIS</text>
+</svg>

@@ -10,7 +10,7 @@ HTML estático con datos de muestra: no hay backend, pagos ni pedidos reales.
 | `index.html` | Inicio con video de marca (simulado), colecciones, editorial y productos |
 | `coleccion.html?c=estrella` | Colecciones con tipografía propia (`estrella`, `orbita`, `arquero`, `nebula`) |
 | `producto.html?p=arquero` | Ficha con selector de color, cuello y manga |
-| `personaliza.html` | Estudio para subir y ubicar un diseño propio |
+| `personaliza.html` | Estudio: el diseño se ubica en cualquier parte de la camiseta (mangas y espalda incluidas) o la cubre toda (`?ejemplo=cubrir`) |
 | `carrito.html` · `seguimiento.html` | Bolsa, pago simulado y seguimiento del envío |
 | `movil.html` | Vista en teléfonos (PWA) |
 
